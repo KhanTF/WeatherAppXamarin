@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceAssemblyReference>true</ProduceAssemblyReference>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="3.6.0.264807" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.0.1" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
+    <PackageReference Include="Unity" Version="5.10.3" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ui\" />
+    <Folder Include="data\" />
+    <Folder Include="ui\view\" />
+    <Folder Include="ui\viewmodel\" />
+    <Folder Include="entity\" />
+    <Folder Include="data\network\" />
+    <Folder Include="data\db\" />
+    <Folder Include="data\db\dao\" />
+    <Folder Include="data\db\dao\impl\" />
+    <Folder Include="data\db\connection\" />
+    <Folder Include="data\db\connection\impl\" />
+    <Folder Include="data\repository\" />
+    <Folder Include="data\repository\impl\" />
+    <Folder Include="data\network\weather\" />
+    <Folder Include="data\network\weather\pojo\" />
+    <Folder Include="data\network\kladr\" />
+    <Folder Include="data\network\kladr\pojo\" />
+    <Folder Include="data\mapper\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="ui\view\MyPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="ui\view\MyPage.xaml.cs" />
+    <Compile Remove="data\DataProvider.cs" />
+    <Compile Remove="data\db\connection\SqliteConnectionProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="ui\view\CityListPage.xaml.cs">
+      <DependentUpon>CityListPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>
