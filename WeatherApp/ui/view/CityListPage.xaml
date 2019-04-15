@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="WeatherApp.ui.view.CityListPage">
+<ContentPage Title="Список городов" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="WeatherApp.ui.view.CityListPage">
     <ContentPage.Content>
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
-                <Editor TextChanged="OnCityTextChanged" Placeholder="Введите название города" Margin="8,8,8,0" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
-                
-                <Button Text="Определить местоположение" Clicked="OnFindMe" HorizontalOptions="FillAndExpand"/>
-                
+                <Editor TextChanged="OnCityTextChanged" Text="{Binding CityInput}" Placeholder="Введите название города" Margin="8,8,8,0" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
+                <Button Text="Определить местоположение" Clicked="OnFindMe" HorizontalOptions="FillAndExpand" />
                 <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <ListView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" ItemsSource="{Binding CityModelList}" IsVisible="{Binding IsListVisible}" ItemTapped="OnCitySelected">
                         <ListView.ItemTemplate>
@@ -31,6 +29,14 @@
                 </AbsoluteLayout>
             </StackLayout>
             <ActivityIndicator AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.5,0.5,50,50" IsVisible="{Binding IsProgressVisible}" IsRunning="{Binding IsProgressVisible}" />
+            <ContentView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" BackgroundColor="#80000000" IsVisible="{Binding IsProgressDialogVisible}">
+                <ContentPage.Content>
+                    <StackLayout Padding="30" HorizontalOptions="Center" VerticalOptions="Center">
+                        <ActivityIndicator IsRunning="{Binding IsProgressDialogVisible}" Color="White" />
+                        <Label FontAttributes="Bold" Text="Загрузка..." TextColor="White" />
+                    </StackLayout>
+                </ContentPage.Content>
+            </ContentView>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

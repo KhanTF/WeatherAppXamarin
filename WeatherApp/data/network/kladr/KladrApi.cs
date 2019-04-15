@@ -11,13 +11,11 @@ namespace WeatherApp.data.network.kladr
     {
 
         private static readonly string BASE_URL = "http://kladr-api.ru/";
-
-        private readonly HttpClient httpClient;
+ 
         private readonly HttpClientWrapper httpClientWrapper;
 
         public KladrApi(HttpClient httpClient)
-        {
-            this.httpClient = httpClient;
+        { 
             this.httpClientWrapper = new HttpClientWrapper(httpClient, BASE_URL);
         }
 
@@ -28,7 +26,8 @@ namespace WeatherApp.data.network.kladr
                 ["contentType"] = "city",
                 ["query"] = text,
                 ["withParent"] = "0",
-                ["limit"] = "25"
+                ["limit"] = "25",
+                ["typeCode"] = "1"
             };
             HttpResponseMessage httpResponseMessage = await httpClientWrapper.Get("api.php", param);
             HttpContent httpContent = httpResponseMessage.Content;

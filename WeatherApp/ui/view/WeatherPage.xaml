@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage Title="{Binding City}" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="WeatherApp.ui.view.WeatherPage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" /> 
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <Label Text="Температура" Grid.Row="0" Grid.Column="0" />
+        <Label Text="{Binding Temperature}" Grid.Row="0" Grid.Column="1" /> 
+    </Grid>
+</ContentPage>

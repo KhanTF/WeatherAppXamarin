@@ -38,6 +38,11 @@
     <Folder Include="data\network\kladr\" />
     <Folder Include="data\network\kladr\pojo\" />
     <Folder Include="data\mapper\" />
+    <Folder Include="di\" />
+    <Folder Include="exception\" />
+    <Folder Include="ui\util\" />
+    <Folder Include="ui\util\alert\" />
+    <Folder Include="ui\util\state\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="ui\view\MyPage.xaml" />

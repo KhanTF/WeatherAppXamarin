@@ -4,32 +4,74 @@ using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
+using WeatherApp.data.db.repository;
 using WeatherApp.data.network.kladr;
 using WeatherApp.data.network.kladr.pojo;
+using WeatherApp.data.repository;
+using WeatherApp.exception;
+using WeatherApp.model;
 using WeatherApp.ui.model;
+using WeatherApp.ui.util.alert;
+using WeatherApp.ui.view;
+using Xamarin.Forms;
 
 namespace WeatherApp.ui.viewmodel
 {
     public class CityListViewModel : BaseViewModel
     {
-
-        private KladrApi kladrApi = new KladrApi(new HttpClient());
-        private IList<CityModel> cityModelList = new List<CityModel>();
+        private static readonly string KEY_CITY_INPUT = "KEY_CITY_INPUT";
+        private readonly INavigation navigation;
+        private readonly ICityRepository cityRepository;
+        private readonly IWeatherRepository weatherRepository;
+        private readonly IAlertManager alertManager;
+        private IList<CityEntity> cityModelList = new List<CityEntity>();
+        private bool isProgressDialogVisible;
         private bool isProgressVisible;
         private bool isListVisible;
         private bool isRetryVisible;
         private bool isEmptyVisible;
-
         private string cityTextCurrent;
+        private string cityInput;
 
-        public CityListViewModel()
+        public string CityInput
         {
-            IsEmptyVisible = CityModelList.Count == 0; 
+            get
+            {
+                return cityInput;
+            }
+            set
+            {
+                cityInput = value;
+                OnPropertyChanged("CityInput");
+            }
         }
 
-        public IList<CityModel> CityModelList
+        public CityListViewModel(ICityRepository cityRepository, IWeatherRepository weatherRepository, IAlertManager alertManager,INavigation navigation) : base()
+        {
+            this.alertManager = alertManager;
+            this.navigation = navigation;
+            this.cityRepository = cityRepository;
+            this.weatherRepository = weatherRepository;
+            IsEmptyVisible = CityModelList.Count == 0;
+        }
+
+        public bool IsProgressDialogVisible
+        {
+            get
+            {
+                return isProgressDialogVisible;
+            }
+            set
+            {
+                isProgressDialogVisible = value;
+                OnPropertyChanged("IsProgressDialogVisible");
+            }
+        }
+
+        public IList<CityEntity> CityModelList
         {
             get { return cityModelList; }
             set
@@ -66,11 +108,6 @@ namespace WeatherApp.ui.viewmodel
             }
         }
 
-        public void onSaveState()
-        {
-
-        }
-
         public bool IsListVisible
         {
             get { return isListVisible; }
@@ -81,15 +118,59 @@ namespace WeatherApp.ui.viewmodel
             }
         }
 
-        public void OnCityNameChanged(string city)
+        public void OnSaveState(IDictionary<string,object> state)
         {
+            state[KEY_CITY_INPUT] = cityTextCurrent;
+        }
+        public void OnRestoreState(IDictionary<string,object> state)
+        {
+            if (state.ContainsKey(KEY_CITY_INPUT))
+            {
+                CityInput = state[KEY_CITY_INPUT] as string;
+            }
+        }
+
+        public async void OnCitySelected(CityEntity cityEntity)
+        {
+            IsProgressDialogVisible = true;
+            try
+            {
+                WeatherEntity weatherEntity = await weatherRepository.GetWeather(cityEntity.Name); 
+                await navigation.PushAsync(WeatherPage.GetInstance(weatherEntity));
+            }
+            catch (WeatherNotFoundException)
+            {
+                alertManager.ShowAlert("Город не найден", "Не удалось определить город", "Ок");
+            }
+            catch (Exception)
+            {
+                alertManager.ShowAlert("Ошибка", "Неизветная ошибка", "Ок");
+            }
+            finally
+            {
+                IsProgressDialogVisible = false;
+            }
+        }
+
+        public void OnCityNameChanged(string city)
+        { 
             LoadData(city.Trim());
         }
 
         public async void OnFindMe()
         {
+            IsProgressDialogVisible = true;
             Position position = await CrossGeolocator.Current.GetPositionAsync();
-            Console.Write("Lat=" + position.Latitude.ToString() + ", Lon=" + position.Longitude.ToString());
+            try
+            {
+                WeatherEntity weatherEntity = await weatherRepository.GetWeather(position.Latitude, position.Longitude); 
+                await navigation.PushAsync(WeatherPage.GetInstance(weatherEntity));
+            }
+            catch (Exception)
+            {
+                alertManager.ShowAlert("Ошибка", "Неизвестная ошибка", "Ок");
+            }
+            IsProgressDialogVisible = false; 
         }
 
         private async void LoadData(string city)
@@ -101,10 +182,7 @@ namespace WeatherApp.ui.viewmodel
             IsProgressVisible = true;
             IsListVisible = false;
 
-            await Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(500);
-            });
+            await Task.Delay(500);
 
             if (!city.Equals(cityTextCurrent))
             {
@@ -113,13 +191,13 @@ namespace WeatherApp.ui.viewmodel
 
             if (city == null || city.Equals(""))
             {
-                CityModelList = new List<CityModel>();
+                CityModelList = new List<CityEntity>();
             }
             else
-            { 
+            {
                 try
-                { 
-                    CityModelList = await GetLoadCity(city);
+                {
+                    CityModelList = await cityRepository.GetCityList(city);
                 }
                 catch (Exception)
                 {
@@ -138,22 +216,8 @@ namespace WeatherApp.ui.viewmodel
         }
 
         public void OnRetry()
-        { 
-            LoadData(cityTextCurrent);
-        }
-
-        private async Task<List<CityModel>> GetLoadCity(string city)
         {
-            List<CityModel> cityModels = new List<CityModel>();
-            if (city.Length > 0)
-            {
-                List<ResultSearchItem> cities = await kladrApi.GetSearchCity(city);
-                foreach (ResultSearchItem resultSearch in cities)
-                {
-                    cityModels.Add(new CityModel(resultSearch.id, resultSearch.name));
-                }
-            }
-            return cityModels;
+            LoadData(cityTextCurrent);
         }
 
     }

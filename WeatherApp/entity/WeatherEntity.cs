@@ -15,10 +15,10 @@ namespace WeatherApp.model
 "cod":200}
      * 
      */
-    public struct WeatherModel
+    public struct WeatherEntity
     {
-        public string conuntry;
-        public string city;
-        public decimal temperature;
+        public string Country { get; set; }
+        public string City { get; set; }
+        public double Temperature { get; set; }
     }
 }

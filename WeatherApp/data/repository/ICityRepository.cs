@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WeatherApp.ui.model;
 
 namespace WeatherApp.data.db.repository
 {
     public interface ICityRepository
     {
-        List<CityEntity> GetCityList();
-        
+        Task<List<CityEntity>> GetCityList(string city); 
     }
 }

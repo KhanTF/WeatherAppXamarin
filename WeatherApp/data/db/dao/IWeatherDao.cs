@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WeatherApp.data.db.dto;
+using WeatherApp.model;
 
 namespace WeatherApp.data.db.dao
 {

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WeatherApp.data.network.dto.response;
+using WeatherApp.exception;
 using WeatherApp.model;
 
 namespace WeatherApp.data.network
@@ -24,8 +26,9 @@ namespace WeatherApp.data.network
         private async Task<CityWeatherItem> GetWeather(IDictionary<string, string> param)
         {
             HttpResponseMessage httpResponseMessage = await httpClientWrapper.Get("weather", param);
+            HttpStatusCode code = httpResponseMessage.StatusCode;
 
-            if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+            if (code == HttpStatusCode.OK)
             {
                 HttpContent httpContent = httpResponseMessage.Content;
                 string json = await httpContent.ReadAsStringAsync();
@@ -33,7 +36,10 @@ namespace WeatherApp.data.network
             }
             else
             {
-                throw new Exception("Get weather by city exception");
+                if (code == HttpStatusCode.NotFound)
+                    throw new WeatherNotFoundException("Weather is null for "+httpResponseMessage.RequestMessage.RequestUri.AbsolutePath);
+                else
+                    throw new Exception("Get weather by city exception");
             }
         }
 
@@ -51,8 +57,8 @@ namespace WeatherApp.data.network
             IDictionary<string, string> param = new Dictionary<string, string>
             {
                 ["appid"] = APP_ID,
-                ["lat"] = lat.ToString(),
-                ["lon"] = lon.ToString()
+                ["lat"] = lat.ToString("0.######"),
+                ["lon"] = lon.ToString("0.######")
             };
             return await GetWeather(param);
         }
