@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage Title="{Binding City}" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="WeatherApp.ui.view.WeatherPage">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" /> 
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        
-        <Label Text="Температура" Grid.Row="0" Grid.Column="0" />
-        <Label Text="{Binding Temperature}" Grid.Row="0" Grid.Column="1" /> 
-    </Grid>
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Text="Температура" Grid.Row="0" Grid.Column="0" Margin="8,4,8,4" />
+            <Label Text="{Binding Temperature}" Grid.Row="0" Grid.Column="1" Margin="8,4,8,4" />
+            <Label Text="Атм.давление" Grid.Row="1" Grid.Column="0" Margin="8,4,8,4" />
+            <Label Text="{Binding Pressure}" Grid.Row="1" Grid.Column="1" Margin="8,4,8,4" />
+            <Label Text="Широта" Grid.Row="2" Grid.Column="0" Margin="8,4,8,4" />
+            <Label Text="{Binding Lat}" Grid.Row="2" Grid.Column="1" Margin="8,4,8,4" />
+            <Label Text="Долгота" Grid.Row="3" Grid.Column="0" Margin="8,4,8,4" />
+            <Label Text="{Binding Lon}" Grid.Row="3" Grid.Column="1" Margin="8,4,8,4" />
+            <Label Text="Облачность" Grid.Row="4" Grid.Column="0" Margin="8,4,8,4" />
+            <Label Text="{Binding Cloud}" Grid.Row="4" Grid.Column="1" Margin="8,4,8,4" />
+        </Grid>
+    </ScrollView>
 </ContentPage>

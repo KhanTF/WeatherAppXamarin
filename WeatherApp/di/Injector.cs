@@ -29,22 +29,20 @@ namespace WeatherApp.di
         private readonly RepositoryContainer repositoryContainer;
         private readonly NetworkContainer networkContainer;
         private readonly ViewModelContainer viewModelContainer;
+        private readonly DbContainer dbContainer;
 
         public Injector()
         {
             networkContainer = new NetworkContainer();
-            repositoryContainer = new RepositoryContainer(networkContainer);
-            viewModelContainer = new ViewModelContainer(repositoryContainer);
+            dbContainer = new DbContainer();
+            repositoryContainer = new RepositoryContainer(networkContainer, dbContainer);
+            viewModelContainer = new ViewModelContainer(repositoryContainer); 
         }
 
         public void Inject(CityListPage cityListPage)
         {
             cityListPage.CityListViewModel = viewModelContainer.ProvideCityViewModel(cityListPage);
-        }
-        public void Inject(MainPage mainPage)
-        {
-
-        }
+        } 
         public void Inject(WeatherPage weatherPage)
         {
             weatherPage.WeatherViewModel = viewModelContainer.ProvideWeatherViewModel(weatherPage);

@@ -7,6 +7,8 @@ namespace WeatherApp.data.db.dao
 {
     public interface IWeatherDao
     {
-        Task<IList<WeatherEntity>> GetWeatherByCityId(int cityId);
+        Task<IList<WeatherEntity>> GetWeatherByCity(string city);
+        Task<IList<WeatherEntity>> GetWeatherByCoord(double lat , double lon);
+        Task InsertOrUpdate(WeatherEntity weatherEntity);
     }
 }

@@ -17,10 +17,10 @@ namespace WeatherApp.di
         private readonly CityMapper cityMapper = new CityMapper();
         private readonly WeatherMapper weatherMapper = new WeatherMapper();
 
-        public RepositoryContainer(NetworkContainer networkContainer)
+        public RepositoryContainer(NetworkContainer networkContainer, DbContainer dbContainer)
         {
             cityRepository = new CityRepository(networkContainer.ProvideKladrApi(), cityMapper);
-            weatherRepository = new WeatherRepository(networkContainer.ProvideWeatherApi(), weatherMapper);
+            weatherRepository = new WeatherRepository(networkContainer.ProvideWeatherApi(), dbContainer.ProvideWeatherDao(), weatherMapper);
         }
 
         public IWeatherRepository ProvideWeatherRepository()

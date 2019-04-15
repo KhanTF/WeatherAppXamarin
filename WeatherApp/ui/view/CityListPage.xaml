@@ -4,7 +4,7 @@
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <Editor TextChanged="OnCityTextChanged" Text="{Binding CityInput}" Placeholder="Введите название города" Margin="8,8,8,0" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
-                <Button Text="Определить местоположение" Clicked="OnFindMe" HorizontalOptions="FillAndExpand" />
+                <Button Text="Определить местоположение" Clicked="OnFindMe" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" />
                 <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <ListView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" ItemsSource="{Binding CityModelList}" IsVisible="{Binding IsListVisible}" ItemTapped="OnCitySelected">
                         <ListView.ItemTemplate>

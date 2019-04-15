@@ -19,11 +19,11 @@ namespace WeatherApp
 
             if (Properties.ContainsKey(KEY_STACK))
             {
-                MainPage = new MainPage();
+                MainPage = new NavigationPage();
             }
             else
             {
-                MainPage = new MainPage(new CityListPage());
+                MainPage = new NavigationPage(new CityListPage());
             }
         }
 

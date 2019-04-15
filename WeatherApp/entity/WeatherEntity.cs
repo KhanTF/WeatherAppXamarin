@@ -1,4 +1,6 @@
 ﻿using System;
+using SQLite;
+
 namespace WeatherApp.model
 {
     /*
@@ -17,8 +19,17 @@ namespace WeatherApp.model
      */
     public struct WeatherEntity
     {
-        public string Country { get; set; }
+        [PrimaryKey]
         public string City { get; set; }
+        public string CityLocal { get; set; }
+        public string Country { get; set; } 
         public double Temperature { get; set; }
+        public long Dt { get; set; }
+        public double Lat { get; set; }
+        public double Lon { get; set; }
+        public double Wind { get; set; }
+        public double Preseure { get; set; }
+        public double Cloud { get; set; }
+
     }
 }
